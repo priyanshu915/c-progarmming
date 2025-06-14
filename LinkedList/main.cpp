@@ -2,33 +2,34 @@
 
 template <typename T> struct Node {
   T data;
-  Node* next;
+  Node *next;
   Node() : data(0), next(nullptr) {};
-  Node(T value): data(value), next(nullptr) {};
-  Node(T value, Node* nextNode): data(value),  next(nextNode) {};
+  Node(T value) : data(value), next(nullptr) {};
+  Node(T value, Node *nextNode) : data(value), next(nextNode) {};
 };
 
 template <typename T> struct List {
-  private:
-  Node<T>* head;
-  Node<T>* tail;
+private:
+  Node<T> *head;
+  Node<T> *tail;
 
-  public:
-  List(): head(nullptr), tail(nullptr) {};
+public:
+  List() : head(nullptr), tail(nullptr) {};
 
   int length() {
     int length = 0;
-    Node<T>* temp = head;
-    while(temp!=nullptr) {
+    Node<T> *temp = head;
+    while (temp != nullptr) {
       temp = temp->next;
       length++;
     }
-    return length > 0? length++: length;
+    return length > 0 ? length++ : length;
   }
 
   void push_front(T value) {
-    Node<T>* newNode = new Node<T>(value);
-    if(head==nullptr) head = tail = newNode;
+    Node<T> *newNode = new Node<T>(value);
+    if (head == nullptr)
+      head = tail = newNode;
     else {
       newNode->next = head;
       head = newNode;
@@ -36,32 +37,33 @@ template <typename T> struct List {
   }
 
   void push_back(T value) {
-    Node<T>* newNode = new Node<T>(value);
-    if(tail == nullptr) head = tail = newNode;
+    Node<T> *newNode = new Node<T>(value);
+    if (tail == nullptr)
+      head = tail = newNode;
     else {
-      Node<T>* temp = tail;
+      Node<T> *temp = tail;
       tail = newNode;
       temp->next = tail;
     }
   }
 
   void pop_front() {
-    if(head == nullptr) {
+    if (head == nullptr) {
       std::cout << "Linked list is empty" << std::endl;
       return;
     }
-    Node<T>* temp = head;
+    Node<T> *temp = head;
     head = temp->next;
     delete temp;
   }
 
   void pop_back() {
-    if(tail==nullptr){
+    if (tail == nullptr) {
       std::cout << "Linked List is empty" << std::endl;
       return;
     }
-    Node<T>* temp = head;
-    while(temp->next != tail) {
+    Node<T> *temp = head;
+    while (temp->next != tail) {
       temp = temp->next;
     }
     tail = temp;
@@ -70,8 +72,8 @@ template <typename T> struct List {
 
   int search(T data) {
     int index = 0;
-    Node<T>* temp = head;
-    while(temp->data!=data) {
+    Node<T> *temp = head;
+    while (temp->data != data) {
       temp = temp->next;
       index++;
     }
@@ -79,30 +81,49 @@ template <typename T> struct List {
   }
 
   void insert(T value, int pos) {
-    if(pos < 0 || pos >= length()) {
+    if (pos < 0 || pos >= length()) {
       std::cout << "invalid position" << std::endl;
       return;
     }
-    if(pos == 0) {
+    if (pos == 0) {
       push_front(value);
       return;
     }
-    if(pos==length()-1) {
-      push_back(value);
-    }
 
-    Node<T>* newNode = new Node<T>(value);
-    Node<T>* temp = head;
-    for(int i = 0; i < pos-1; i++){
+    Node<T> *newNode = new Node<T>(value);
+    Node<T> *temp = head;
+    for (int i = 0; i < pos - 1; i++) {
       temp = temp->next;
     }
+    newNode->next = temp->next;
     temp->next = newNode;
-    newNode->next = temp->next->next;
+  }
+
+  void remove(T value) {
+    if (head->data == value) {
+      head = head->next;
+      return;
+    } else {
+      Node<T> *temp = head;
+      while (temp->next->data != value) {
+        temp = temp->next;
+      }
+      // delete temp;
+      temp->next = temp->next->next;
+    }
+  }
+
+  void clear() {
+    head = tail = nullptr;
+  }
+
+  void sort(bool ascending = true) {
+    
   }
 
   void print() {
-    Node<T>* temp = head;
-    while(temp!=nullptr) {
+    Node<T> *temp = head;
+    while (temp != nullptr) {
       std::cout << temp->data << "->";
       temp = temp->next;
     }
@@ -129,13 +150,23 @@ int main() {
   // search
   std::cout << list.search(4) << std::endl;
 
-  // insert 
+  // insert
   list.insert(5, 1); // 6->5->4->NULL
+
+  // remove
+  list.remove(4); // 6->5->NULL
+  list.remove(6); // 5->NULL
+
+  // clear
+  list.clear(); // NUL;
+
+  list.push_front(0);
+  list.push_back(1);
+  list.push_back(2);
+  list.push_back(3);
+  list.push_back(4);
+  list.push_back(5);
 
   list.print();
   std::cout << "Length of list: " << list.length() << std::endl;
 }
-
-
-
-// logic writting in insert function on linked list
