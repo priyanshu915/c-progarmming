@@ -127,6 +127,35 @@ public:
       prev = curr;
       curr = next;
     }
+    head = prev;
+    tail = (head != nullptr? nullptr: tail);
+  }
+
+  void middle() {
+    Node<T>* slow = head;
+    Node<T>* fast = head;
+    while(fast!=nullptr && fast->next != nullptr) {
+      slow = slow->next;
+      fast = fast->next->next;
+    }
+    head = slow;
+  }
+
+  void createCycle(int pos) {
+    if(head == nullptr || tail == nullptr) {
+      std::cout << "Linked list is empty" << std::endl;
+      return;
+    }
+    if(head->next == nullptr) {
+      std::cout << "Linked list should consist at least 2 element" << std::endl;
+      return;
+    }
+    
+    Node<T>* temp = head;
+    for(int i = 0; i < pos; i++){
+      temp = temp->next;
+    }
+    tail->next = temp;
   }
 
   void print() {
@@ -175,10 +204,8 @@ int main() {
   list.push_back(3);
   list.push_back(4);
   list.push_back(5);
-  
-  list.print();
 
-  list.reverse();
+  list.createCycle(3);
 
   list.print();
   std::cout << "Length of list: " << list.length() << std::endl;
