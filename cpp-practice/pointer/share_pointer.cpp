@@ -12,7 +12,6 @@ class Test {
 
 int main() {
   std::shared_ptr<Test> ptr1 = std::make_shared<Test>("ptr1");
-  ptr1->print("hello world");
 
   (*ptr1.get()).print("hello");
   std::shared_ptr<Test>ptr2 = ptr1;
