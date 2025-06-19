@@ -1,4 +1,3 @@
-#include <cstddef>
 #include <iostream>
 
 struct ListNode {
@@ -14,8 +13,12 @@ public:
         int carry = 0;
         ListNode* temp1 = l1, *temp2 = l2;
         ListNode* dummy = new ListNode();
+        ListNode* specialNode = new ListNode(0);
         ListNode* current = dummy;
+        
         while(temp1 != nullptr || temp2 != nullptr) {
+          if(temp1 == nullptr && temp2 != nullptr) temp1 = specialNode;
+          if(temp1 != nullptr && temp2 == nullptr) temp2 = specialNode;
             int sum = temp1->val + temp2->val;
             if(carry > 0) {
                 sum += carry;
@@ -33,6 +36,10 @@ public:
 
             temp1 = temp1->next;
             temp2 = temp2->next;
+
+            if(carry > 0 && temp1 == nullptr && temp2 == nullptr) {
+                current->next = new ListNode(carry);
+            }
         }
 
         return dummy->next;
@@ -45,11 +52,12 @@ int main() {
   l1 = new ListNode(2);
   l1->next = new ListNode(4);
   l1->next->next = new ListNode(3);
-  l1->next->next->next = nullptr;
+  l1->next->next->next = new ListNode(7);
+  l1->next->next->next->next = nullptr;
 
   l2 = new ListNode(2);
   l2->next = new ListNode(4);
-  l2->next->next = new ListNode(3);
+  l2->next->next = new ListNode(7);
   l2->next->next->next = nullptr;
 
   ListNode* temp1 = l1;
